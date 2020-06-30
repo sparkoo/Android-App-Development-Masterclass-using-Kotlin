@@ -31,5 +31,5 @@ fun main() {
   p1.add("eh")
   p1.add("uh")
 
-  p1.print()\
+  p1.print()
 }
