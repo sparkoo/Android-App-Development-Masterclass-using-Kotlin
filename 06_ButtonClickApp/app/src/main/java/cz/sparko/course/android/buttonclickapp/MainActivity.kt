@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     textView.movementMethod = ScrollingMovementMethod()
     button.setOnClickListener {
       textView.append("pico [${timesClicked++}] kokotsrac ${editText.text}\n")
+      editText.text.clear()
     }
   }
 }
