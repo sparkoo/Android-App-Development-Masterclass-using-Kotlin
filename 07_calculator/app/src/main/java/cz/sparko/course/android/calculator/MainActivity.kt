@@ -12,9 +12,21 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 val TAG = MainActivity::class.java.simpleName
 
 class MainActivity : AppCompatActivity() {
-    var resultHolder: Double = .0
-    var newNumberHolder: Double = .0
-    var operationHolder: String = "="
+    private var resultHolder: Double = .0
+    private var newNumberHolder: Double = .0
+
+    private val numberButtons by lazy {
+        setOf<Button>(key_0, key_1, key_2, key_3, key_4, key_5, key_6, key_7, key_8, key_9, key_dot)
+    }
+    private val opsButtons by lazy {
+        setOf<Button>(
+            key_plus,
+            key_minus,
+            key_multiply,
+            key_divide,
+            key_equals
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +41,14 @@ class MainActivity : AppCompatActivity() {
         val numberOnClickListener = View.OnClickListener { v ->
             val pressed = (v as Button).text
             newNumber.append(pressed)
-            if (newNumber.text.toString() == ".") {
-                newNumberHolder = 0.0
+            newNumberHolder = if (newNumber.text.toString() == ".") {
+                0.0
             } else {
-                newNumberHolder = newNumber.text.toString().toDouble()
+                newNumber.text.toString().toDouble()
             }
         }
 
-        val opOnClickListener = View.OnClickListener {v ->
+        val opOnClickListener = View.OnClickListener { v ->
             val btn = v as Button
             if (resultHolder == 0.0) {
                 resultHolder = newNumberHolder
@@ -58,23 +70,8 @@ class MainActivity : AppCompatActivity() {
             showNumbers()
         }
 
-        key_0.setOnClickListener(numberOnClickListener)
-        key_1.setOnClickListener(numberOnClickListener)
-        key_2.setOnClickListener(numberOnClickListener)
-        key_3.setOnClickListener(numberOnClickListener)
-        key_4.setOnClickListener(numberOnClickListener)
-        key_5.setOnClickListener(numberOnClickListener)
-        key_6.setOnClickListener(numberOnClickListener)
-        key_7.setOnClickListener(numberOnClickListener)
-        key_8.setOnClickListener(numberOnClickListener)
-        key_9.setOnClickListener(numberOnClickListener)
-        key_dot.setOnClickListener(numberOnClickListener)
-
-        key_plus.setOnClickListener(opOnClickListener)
-        key_minus.setOnClickListener(opOnClickListener)
-        key_divide.setOnClickListener(opOnClickListener)
-        key_multiply.setOnClickListener(opOnClickListener)
-        key_equals.setOnClickListener(opOnClickListener)
+        numberButtons.forEach { b -> b.setOnClickListener(numberOnClickListener) }
+        opsButtons.forEach { b -> b.setOnClickListener(opOnClickListener) }
 
         key_c.setOnClickListener {
             resultHolder = .0
