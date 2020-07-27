@@ -150,6 +150,16 @@
         app:layout_constraintTop_toBottomOf="@+id/key_1" />
 
     <Button
+        android:id="@+id/key_c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minWidth="48dp"
+        android:text="C"
+        app:layout_constraintStart_toStartOf="@+id/key_0"
+        app:layout_constraintTop_toBottomOf="@+id/key_0" />
+
+    <Button
         android:id="@+id/key_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -174,10 +184,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:minWidth="48dp"
         android:text="-"
         app:layout_constraintBaseline_toBaselineOf="@+id/key_3"
-        app:layout_constraintStart_toEndOf="@+id/key_3"
-        android:minWidth="48dp" />
+        app:layout_constraintStart_toEndOf="@+id/key_3" />
 
     <Button
         android:id="@+id/key_plus"
