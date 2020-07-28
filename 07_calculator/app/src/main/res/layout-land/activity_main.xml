@@ -27,7 +27,7 @@
         android:focusableInTouchMode="false"
         android:inputType="numberDecimal"
         android:text="-12.44"
-        app:layout_constraintEnd_toStartOf="@+id/newNumber"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,13 +35,15 @@
         android:id="@+id/newNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:inputType="numberDecimal"
         app:layout_constraintBaseline_toBaselineOf="@+id/result"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <TextView
         android:id="@+id/operation"
@@ -184,10 +186,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:minWidth="48dp"
         android:text="-"
         app:layout_constraintBaseline_toBaselineOf="@+id/key_3"
-        app:layout_constraintStart_toEndOf="@+id/key_3"
-        android:minWidth="48dp" />
+        app:layout_constraintStart_toEndOf="@+id/key_3" />
 
     <Button
         android:id="@+id/key_plus"
@@ -218,5 +220,12 @@
         android:text="/"
         app:layout_constraintBaseline_toBaselineOf="@+id/key_9"
         app:layout_constraintStart_toEndOf="@+id/key_9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
