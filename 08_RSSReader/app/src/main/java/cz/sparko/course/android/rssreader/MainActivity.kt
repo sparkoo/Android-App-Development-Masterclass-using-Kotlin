@@ -1,18 +1,12 @@
 package cz.sparko.course.android.rssreader
 
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import java.io.BufferedReader
+import androidx.appcompat.app.AppCompatActivity
 import java.io.IOException
-import java.io.InputStreamReader
-import java.lang.Exception
-import java.lang.StringBuilder
-import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-
 
 class MainActivity : AppCompatActivity() {
     @Suppress("PrivatePropertyName")
@@ -47,34 +41,9 @@ class MainActivity : AppCompatActivity() {
 
             private fun downloadXML(urlPath: String?): String {
                 try {
-                    val connection = URL(urlPath).openConnection() as HttpURLConnection
-                    Log.d(
-                        TAG,
-                        "downloadXML: response code from [$urlPath] was [${connection.responseCode}]"
-                    )
-                    val xmlContentBuilder = StringBuilder()
-                    connection.inputStream.buffered().reader()
-                        .use { xmlContentBuilder.append(it.readText()) }
-                    return xmlContentBuilder.toString()
+                    return URL(urlPath).readText()
                 } catch (e: Exception) {
-                    when (e) {
-                        is MalformedURLException -> Log.e(
-                            TAG,
-                            "downloadXML: Wrong URL to download [${e.message}]]",
-                            e
-                        )
-                        is IOException -> Log.e(
-                            TAG,
-                            "downloadXML: Some IO failed [${e.message}]]",
-                            e
-                        )
-                        is SecurityException -> Log.e(
-                            TAG,
-                            "downloadXML: Missing permissions [${e.message}]]",
-                            e
-                        )
-                        else -> Log.e(TAG, "downloadXML: Some other failure [${e.message}]", e)
-                    }
+                    Log.e(TAG, "downloadXML: Failed. [${e.message}] [${e.cause}]", e)
                 }
                 return ""
             }
