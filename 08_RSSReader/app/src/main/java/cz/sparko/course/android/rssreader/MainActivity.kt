@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import java.net.URL
 
+data class FeedEntry(val name: String, val artist: String, val releaseDate: String, val summary: String, val imageUrl: String)
+
 class MainActivity : AppCompatActivity() {
   @Suppress("PrivatePropertyName")
   private val TAG = this::class.java.simpleName
@@ -25,16 +27,20 @@ class MainActivity : AppCompatActivity() {
       @Suppress("PrivatePropertyName")
       private val TAG = this::class.java.simpleName
 
-      override fun onPostExecute(result: String?) {
+      override fun onPostExecute(result: String) {
         super.onPostExecute(result)
         Log.d(TAG, "onPostExecute: parameter is $result")
+
+        val apps = ParseApps().parse(result)
+        Log.d(TAG, "doInBackground: parsed apps $apps")
       }
 
       override fun doInBackground(vararg url: String?): String {
         Log.d(TAG, "doInBackground: starts with ${url[0]}")
         val xmlContent = downloadXML(url[0])
-        Log.d(TAG, "doInBackground: $xmlContent")
-        return "doInBackground completed"
+//        Log.d(TAG, "doInBackground: $xmlContent")
+
+        return xmlContent
       }
 
       private fun downloadXML(urlPath: String?): String {
