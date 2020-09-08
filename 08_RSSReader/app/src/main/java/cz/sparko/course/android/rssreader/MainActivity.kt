@@ -1,12 +1,29 @@
 package cz.sparko.course.android.rssreader
 
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import cz.sparko.course.android.rssreader.R.layout.list_item
+import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URL
 
-data class FeedEntry(val name: String, val artist: String, val releaseDate: String, val summary: String, val imageUrl: String)
+data class FeedEntry(
+  val name: String,
+  val artist: String,
+  val releaseDate: String,
+  val summary: String,
+  val imageUrl: String
+
+
+) {
+  override fun toString(): String {
+    return "FeedEntry(name='$name', artist='$artist', releaseDate='$releaseDate')"
+  }
+}
 
 class MainActivity : AppCompatActivity() {
   @Suppress("PrivatePropertyName")
@@ -17,13 +34,14 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
 
     Log.d(TAG, "onCreate: start")
-    val downloadData = DownloadData()
-    downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml")
+    val downloadData = DownloadData(this, xmlListView)
+    downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=50/xml")
     Log.d(TAG, "onCreate: done")
   }
 
   companion object {
-    private class DownloadData : AsyncTask<String, Void, String>() {
+    private class DownloadData(private val context: Context, private val listView: ListView) :
+      AsyncTask<String, Void, String>() {
       @Suppress("PrivatePropertyName")
       private val TAG = this::class.java.simpleName
 
@@ -33,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         val apps = ParseApps().parse(result)
         Log.d(TAG, "doInBackground: parsed apps $apps")
+
+        val arrayAdapter = ArrayAdapter<FeedEntry>(context, list_item, apps)
+        listView.adapter = arrayAdapter
       }
 
       override fun doInBackground(vararg url: String?): String {
