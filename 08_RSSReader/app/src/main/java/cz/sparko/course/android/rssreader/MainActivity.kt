@@ -4,10 +4,8 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import cz.sparko.course.android.rssreader.R.layout.list_item
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URL
 
@@ -57,8 +55,7 @@ class MainActivity : AppCompatActivity() {
         val apps = ParseApps().parse(result)
         Log.d(TAG, "doInBackground: parsed apps $apps")
 
-        val arrayAdapter = ArrayAdapter<FeedEntry>(context, list_item, apps)
-        listView.adapter = arrayAdapter
+        listView.adapter = FeedAdapter(context, R.layout.list_record, apps)
       }
 
       override fun doInBackground(vararg url: String?): String {
