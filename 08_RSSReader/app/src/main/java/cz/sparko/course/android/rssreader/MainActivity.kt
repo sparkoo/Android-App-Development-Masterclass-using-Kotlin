@@ -28,35 +28,75 @@ data class FeedEntry(
 class MainActivity : AppCompatActivity() {
   @Suppress("PrivatePropertyName")
   private val TAG = this::class.java.simpleName
+
+  private val FEED_URL_BUNDLE_KEY = "feedUrl"
+  private val FEED_LIMIT_BUNDLE_KEY = "feedLimit"
+
   private var downloadData: DownloadData? = null
+
+  private var feedUrlFormat =
+    "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml"
+  private var feedLimit = 10
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
-    downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml")
+    Log.d(TAG, "onCreate: first hehe")
+    feedUrlFormat = savedInstanceState?.getString("feedUrl", feedUrlFormat) ?: feedUrlFormat
+    feedLimit = savedInstanceState?.getInt("feedLimit", feedLimit) ?: feedLimit
+    downloadUrl(feedUrlFormat, feedLimit, true)
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
     menuInflater.inflate(R.menu.feeds_menu, menu)
+    when(feedLimit) {
+      10 -> menu?.findItem(R.id.menu_10)?.isChecked = true
+      25 -> menu?.findItem(R.id.menu_25)?.isChecked = true
+    }
     return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     Log.d(TAG, "onOptionsItemSelected: $item")
-    val feedUrl = when (item.itemId) {
-      R.id.menu_free -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml"
-      R.id.menu_paid -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=10/xml"
-      R.id.menu_songs -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml"
-      else -> return super.onOptionsItemSelected(item)
+    val feedUrlFormatSelect = when (item.itemId) {
+      R.id.menu_free -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml"
+      R.id.menu_paid -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=%d/xml"
+      R.id.menu_songs -> "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=%d/xml"
+      else -> feedUrlFormat
     }
-    downloadUrl(feedUrl)
+
+    val feedLimitSelect = when (item.itemId) {
+      R.id.menu_10 -> {
+        item.isChecked = true; 10
+      }
+      R.id.menu_25 -> {
+        item.isChecked = true; 25
+      }
+      else -> feedLimit
+    }
+
+    downloadUrl(feedUrlFormatSelect, feedLimitSelect, item.itemId == R.id.menu_refresh)
+
+    this.feedUrlFormat = feedUrlFormatSelect
+    this.feedLimit = feedLimitSelect
+
     return super.onOptionsItemSelected(item)
   }
 
-  private fun downloadUrl(feedUrl: String) {
-    downloadData = DownloadData(this, xmlListView)
-    downloadData?.execute(feedUrl)
+  private fun downloadUrl(feedUrlFormat: String, feedLimit: Int, force: Boolean = false) {
+    Log.d(TAG, "downloadUrl: [${feedUrlFormat.format(feedLimit)}, $force]")
+    if (force || feedUrlFormat != this.feedUrlFormat || feedLimit != this.feedLimit) {
+      Log.d(TAG, "downloadUrl: downloading !!!")
+      downloadData = DownloadData(this, xmlListView)
+      downloadData?.execute(feedUrlFormat.format(feedLimit))
+    }
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    Log.d(TAG, "onSaveInstanceState: saving [$feedUrlFormat] [$feedLimit]")
+    outState.putString("feedUrl", feedUrlFormat)
+    outState.putInt("feedLimit", feedLimit)
   }
 
   override fun onDestroy() {

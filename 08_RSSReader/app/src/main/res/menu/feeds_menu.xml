@@ -11,4 +11,18 @@
     <item
         android:id="@+id/menu_songs"
         android:title="Songs" />
+    <group
+        android:id="@+id/menu_gtpLimit"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_10"
+            android:checked="true"
+            android:title="Top 10" />
+        <item
+            android:id="@+id/menu_25"
+            android:title="Top 25" />
+    </group>
+    <item
+        android:id="@+id/menu_refresh"
+        android:title="Refresh" />
 </menu>

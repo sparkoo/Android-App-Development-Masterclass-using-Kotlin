@@ -1,6 +1,5 @@
 package cz.sparko.course.android.rssreader
 
-import android.util.Log
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 
@@ -30,7 +29,7 @@ class ParseApps {
         XmlPullParser.START_TAG -> {
           if (tagName == "entry") {
             val entry = parseEntry(xmlParser)
-            Log.d(TAG, "parse: parsed $entry")
+//            Log.d(TAG, "parse: parsed $entry")
             apps.add(entry)
           }
         }
@@ -43,7 +42,7 @@ class ParseApps {
   }
 
   private fun parseEntry(xmlParser: XmlPullParser): FeedEntry {
-    Log.d(TAG, "parseEntry: ")
+//    Log.d(TAG, "parseEntry: ")
 
     var eventType = xmlParser.next()
     var name = ""
