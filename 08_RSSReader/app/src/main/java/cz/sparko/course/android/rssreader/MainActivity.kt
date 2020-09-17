@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     Log.d(TAG, "onCreate: first hehe")
-    feedUrlFormat = savedInstanceState?.getString("feedUrl", feedUrlFormat) ?: feedUrlFormat
-    feedLimit = savedInstanceState?.getInt("feedLimit", feedLimit) ?: feedLimit
+    feedUrlFormat = savedInstanceState?.getString(FEED_URL_BUNDLE_KEY, feedUrlFormat) ?: feedUrlFormat
+    feedLimit = savedInstanceState?.getInt(FEED_LIMIT_BUNDLE_KEY, feedLimit) ?: feedLimit
     downloadUrl(feedUrlFormat, feedLimit, true)
   }
 
@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity() {
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     Log.d(TAG, "onSaveInstanceState: saving [$feedUrlFormat] [$feedLimit]")
-    outState.putString("feedUrl", feedUrlFormat)
-    outState.putInt("feedLimit", feedLimit)
+    outState.putString(FEED_URL_BUNDLE_KEY, feedUrlFormat)
+    outState.putInt(FEED_LIMIT_BUNDLE_KEY, feedLimit)
   }
 
   override fun onDestroy() {
