@@ -11,7 +11,7 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 
 const val YOUTUBE_VIDEO_ID = "1CR0QmCaMTs"
-const val YOUTUBE_PLAYLIST_ID = "RDCMUCHOtaAJCOBDUWIcL4372D9A"
+const val YOUTUBE_PLAYLIST_ID = "PLN26ZvUvDxVTWBGo0w4ICWPU6-7BZb7Kb"
 
 private const val TAG = "YoutubeActivity"
 
