@@ -1,5 +1,6 @@
 package cz.sparko.course.android.youtubeplayer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -16,13 +17,15 @@ const val YOUTUBE_PLAYLIST_ID = "PLN26ZvUvDxVTWBGo0w4ICWPU6-7BZb7Kb"
 private const val TAG = "YoutubeActivity"
 
 class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
+  private val DIALOG_REQUEST_CODE = 1
+
+  val playerView by lazy { YouTubePlayerView(this) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val layout = layoutInflater.inflate(R.layout.activity_youtube, null) as ConstraintLayout
     setContentView(layout)
 
-    val playerView = YouTubePlayerView(this)
     playerView.layoutParams = ConstraintLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
     layout.addView(playerView)
 
@@ -52,16 +55,24 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
     provider: YouTubePlayer.Provider?,
     youTubeInitializationResult: YouTubeInitializationResult?
   ) {
-    val REQUEST_CODE = 0
-
     if (youTubeInitializationResult?.isUserRecoverableError == true) {
-      youTubeInitializationResult.getErrorDialog(this, REQUEST_CODE)?.show()
+      youTubeInitializationResult.getErrorDialog(this, DIALOG_REQUEST_CODE)?.show()
     } else {
       Toast.makeText(
         this,
         "Error initializing the YoutubePlayer [$youTubeInitializationResult]",
         Toast.LENGTH_LONG
       ).show()
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    Log.d(TAG, "onActivityResult: request: [$requestCode] result: [$resultCode]")
+
+    if (requestCode == DIALOG_REQUEST_CODE) {
+      Log.d(TAG, "onActivityResult: ${intent?.toString()}")
+      Log.d(TAG, "onActivityResult: ${intent?.extras.toString()}")
+      playerView.initialize(getString(R.string.google_api_key), this)
     }
   }
 
