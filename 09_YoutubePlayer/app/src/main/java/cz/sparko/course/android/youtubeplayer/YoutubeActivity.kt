@@ -42,7 +42,9 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
     player?.setPlaybackEventListener(playbackEventListener)
 
     if (!wasRestored) {
-      player?.cueVideo(YOUTUBE_VIDEO_ID)
+      player?.loadVideo(YOUTUBE_VIDEO_ID)
+    } else {
+      player?.play()
     }
   }
 
