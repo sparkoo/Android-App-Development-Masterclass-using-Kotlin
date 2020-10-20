@@ -5,10 +5,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import cz.sparko.course.android.flickrbrowser.DownloadStatus.OK
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
+class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
+  GetFlickrJsonData.OnDataAvailable {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     Log.d(TAG, "onCreate: called")
@@ -41,6 +43,19 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
   }
 
   override fun onDownloadComplete(data: String, status: DownloadStatus) {
-    Log.d(TAG, "onDownloadComplete: $status -> $data")
+    Log.d(TAG, "onDownloadComplete: status [$status]")
+    if (status == OK) {
+      GetFlickrJsonData(this).execute(data)
+    } else {
+      Log.e(TAG, "onDownloadComplete: status not OK, don't even try to parse")
+    }
+    Log.d(TAG, "onDownloadComplete: called ?")
+  }
+
+  override fun onDataAvailable(data: List<Photo>) {
+    Log.v(TAG, "onDataAvailable: $data")
+  }
+
+  override fun onError(e: Exception) {
   }
 }
