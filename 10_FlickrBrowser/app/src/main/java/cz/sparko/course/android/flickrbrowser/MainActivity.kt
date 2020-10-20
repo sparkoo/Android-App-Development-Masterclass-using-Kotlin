@@ -19,10 +19,6 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
     val getRawData = GetRawData(this)
     getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=android,oreo&format=json&nojsoncallback=1")
 
-//    findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-//      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//        .setAction("Action", null).show()
-//    }
     Log.d(TAG, "onCreate: ends")
   }
 
