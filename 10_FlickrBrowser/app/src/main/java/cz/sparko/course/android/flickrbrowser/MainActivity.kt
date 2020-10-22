@@ -1,5 +1,6 @@
 package cz.sparko.course.android.flickrbrowser
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -19,9 +20,28 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
     setSupportActionBar(findViewById(R.id.toolbar))
 
     val getRawData = GetRawData(this)
-    getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=android,oreo&format=json&nojsoncallback=1")
+
+    getRawData.execute(
+      createUri(
+        "https://api.flickr.com/services/feeds/photos_public.gne",
+        "android,oreo",
+        "en-us",
+        true
+      )
+    )
 
     Log.d(TAG, "onCreate: ends")
+  }
+
+  private fun createUri(baseUrl: String, tags: String, lang: String, matchAll: Boolean): String {
+    return Uri.parse(baseUrl).buildUpon()
+      .appendQueryParameter("tags", tags)
+      .appendQueryParameter("tagmode", if (matchAll) "ALL" else "ANY")
+      .appendQueryParameter("lang", lang)
+      .appendQueryParameter("format", "json")
+      .appendQueryParameter("nojsoncallback", "1")
+      .build()
+      .toString()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
