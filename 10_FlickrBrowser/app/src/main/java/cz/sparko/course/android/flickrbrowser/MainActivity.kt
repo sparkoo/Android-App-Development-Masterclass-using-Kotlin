@@ -1,5 +1,6 @@
 package cz.sparko.course.android.flickrbrowser
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -7,14 +8,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.sparko.course.android.flickrbrowser.DownloadStatus.OK
 import kotlinx.android.synthetic.main.content_main.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
+class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
   GetFlickrJsonData.OnDataAvailable, RecyclerItemClickListener.OnRecyclerClickListener {
 
   private val flickrRecyclerViewAdapter = FlickrRecyclerViewAdapter(emptyList())
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
     Log.d(TAG, "onCreate: called")
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    setSupportActionBar(findViewById(R.id.toolbar))
+    activateToolbar(false)
 
     recycler_view.layoutManager = LinearLayoutManager(this)
     recycler_view.addOnItemTouchListener(RecyclerItemClickListener(this, recycler_view, this))
@@ -49,7 +49,11 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete,
 
   override fun onItemLongClick(view: View, position: Int) {
     Log.d(TAG, "onItemLongClick: $position")
-    Toast.makeText(this, "Long clicked on [$position]", Toast.LENGTH_SHORT).show()
+    flickrRecyclerViewAdapter.getPhoto(position)?.let {
+      val intent = Intent(this, PhotoDetailsActivity::class.java)
+      intent.putExtra(PHOTO_TRANSFER, it)
+      startActivity(intent)
+    }
   }
 
   private fun createUri(baseUrl: String, tags: String, lang: String, matchAll: Boolean): String {

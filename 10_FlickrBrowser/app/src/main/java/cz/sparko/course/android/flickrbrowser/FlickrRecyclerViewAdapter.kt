@@ -34,7 +34,7 @@ class FlickrRecyclerViewAdapter(private var photos: List<Photo>) :
     notifyDataSetChanged()
   }
 
-  private fun getPhoto(position: Int): Photo? {
+  fun getPhoto(position: Int): Photo? {
     return if (photos.size >= position) {
       photos[position]
     } else {
