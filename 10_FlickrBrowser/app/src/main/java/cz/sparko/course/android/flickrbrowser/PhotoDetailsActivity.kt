@@ -15,7 +15,7 @@ class PhotoDetailsActivity : BaseActivity() {
     setContentView(R.layout.activity_photo_details)
     activateToolbar(true)
 
-    (intent.getSerializableExtra(PHOTO_TRANSFER) as Photo?)?.let {
+    intent.getParcelableExtra<Photo>(PHOTO_TRANSFER)?.let {
       Log.d(TAG, "onCreate: transfered photo [$it]")
       photo_title.text = it.title
       photo_tags.text = it.tags
