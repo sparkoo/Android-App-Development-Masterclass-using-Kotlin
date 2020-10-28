@@ -21,12 +21,17 @@ class FlickrRecyclerViewAdapter(private var photos: List<Photo>) :
   }
 
   override fun onBindViewHolder(holder: FlickrImageViewHolder, position: Int) {
-    val photoItem = getPhoto(position)
-    Picasso.get().load(photoItem?.image)
-      .error(R.drawable.image_placeholder)
-      .placeholder(R.drawable.image_placeholder)
-      .into(holder.thumbnail)
-    holder.title.text = photoItem?.title ?: "Photo not found"
+    if (photos.isEmpty()) {
+      holder.thumbnail.setImageResource(R.drawable.image_placeholder)
+      holder.title.setText(R.string.empty_photo)
+    } else {
+      val photoItem = getPhoto(position)
+      Picasso.get().load(photoItem?.image)
+        .error(R.drawable.image_placeholder)
+        .placeholder(R.drawable.image_placeholder)
+        .into(holder.thumbnail)
+      holder.title.text = photoItem?.title ?: "Photo not found"
+    }
   }
 
   fun loadNewData(newPhotos: List<Photo>) {
@@ -43,7 +48,7 @@ class FlickrRecyclerViewAdapter(private var photos: List<Photo>) :
   }
 
   override fun getItemCount(): Int {
-    return photos.size
+    return if (photos.isNotEmpty()) photos.size else 1
   }
 }
 

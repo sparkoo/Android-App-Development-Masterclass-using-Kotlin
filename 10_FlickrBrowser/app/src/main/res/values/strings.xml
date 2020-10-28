@@ -14,4 +14,5 @@
     <string name="photo_author_text">Author: %s</string>
     <string name="action_search">Search</string>
     <string name="searchable_hint">Enter photo tags</string>
+    <string name="empty_photo">No photos found.\n\nUse the search icon to search for photos.</string>
 </resources>
