@@ -17,8 +17,9 @@ class PhotoDetailsActivity : BaseActivity() {
 
     intent.getParcelableExtra<Photo>(PHOTO_TRANSFER)?.let {
       Log.d(TAG, "onCreate: transfered photo [$it]")
-      photo_title.text = it.title
-      photo_tags.text = it.tags
+      photo_author.text = resources.getString(R.string.photo_author_text, it.author)
+      photo_title.text = resources.getString(R.string.photo_title_text, it.title)
+      photo_tags.text = resources.getString(R.string.photo_tags_text, it.tags)
       Picasso.get().load(it.image)
         .error(R.drawable.image_placeholder)
         .placeholder(R.drawable.image_placeholder)
