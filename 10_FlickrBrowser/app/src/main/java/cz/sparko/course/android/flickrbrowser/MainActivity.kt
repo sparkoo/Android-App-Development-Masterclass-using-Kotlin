@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.sparko.course.android.flickrbrowser.DownloadStatus.OK
 import kotlinx.android.synthetic.main.content_main.*
@@ -28,16 +29,6 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
     recycler_view.layoutManager = LinearLayoutManager(this)
     recycler_view.addOnItemTouchListener(RecyclerItemClickListener(this, recycler_view, this))
     recycler_view.adapter = flickrRecyclerViewAdapter
-
-    val getRawData = GetRawData(this)
-    getRawData.execute(
-      createUri(
-        "https://api.flickr.com/services/feeds/photos_public.gne",
-        "android,oreo",
-        "en-us",
-        true
-      )
-    )
 
     Log.d(TAG, "onCreate: ends")
   }
@@ -105,6 +96,18 @@ class MainActivity : BaseActivity(), GetRawData.OnDownloadComplete,
 
   override fun onResume() {
     Log.d(TAG, "onResume: ")
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+    sharedPreferences.getString(FLICKR_QUERY, "default")?.let {
+      GetRawData(this).execute(
+        createUri(
+          "https://api.flickr.com/services/feeds/photos_public.gne",
+          it,
+          "en-us",
+          true
+        )
+      )
+    }
+
     super.onResume()
   }
 }

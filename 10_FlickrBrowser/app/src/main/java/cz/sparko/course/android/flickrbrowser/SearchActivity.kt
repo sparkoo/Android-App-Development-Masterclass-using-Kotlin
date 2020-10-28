@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.widget.SearchView
+import androidx.preference.PreferenceManager
 
 private const val TAG = "SearchActivity"
 
@@ -34,6 +35,10 @@ class SearchActivity : BaseActivity() {
       override fun onQueryTextSubmit(query: String?): Boolean {
         Log.d(TAG, "onQueryTextSubmit: $query")
 
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        sharedPreferences.edit().putString(FLICKR_QUERY, query).apply()
+        searchView?.clearFocus()
+
         finish()
         return true
       }
@@ -42,6 +47,11 @@ class SearchActivity : BaseActivity() {
         return false
       }
     })
+
+    searchView?.setOnCloseListener {
+      finish()
+      false
+    }
 
     Log.d(TAG, "onCreateOptionsMenu: done")
     return true
